@@ -1,0 +1,459 @@
+
+<h1>Loop Torsion Tool Tutorial</h1>
+
+<h3>1. Introduction</h3>
+
+<p>The Loop Torsion Tool has been created to simplify the process of protein loop homology modelling. The tool uses a
+linear inverse-kinematics approach to target loops' torsions to desired values. The approach assumes fixed bond lengths,
+constrained end groups loops, and ignores molecular interactions. It also allows to constrain any of the torsions within
+a loop's structure for more advanced calculations. Protein structures can either be downloaded from the
+<a href="http://www.rcsb.org">Protein Databank</a> using PDB codes or uploaded manually, and then the loop segments can
+be extracted by providing the first and last ordinals of protein amino acids.</p>
+
+<p>The approach has been devised by Dr. Steven Hayward (University of East Anglia, UK), and Dr. Akio Kitao
+  (The University of Tokyo, Japan &amp; Japan Science and Technology Agency, Japan). The original paper can be accessed
+  <a href="http://www.cell.com/biophysj/fulltext/S0006-3495(10)00147-5">here</a>.</p>
+
+<p>This website, running a script developed by the above-mentioned paper's authors, has been developed by
+  Pavel Solodilov as a part of 3rd year project module of School of Computing Sciences' undergraduate program in
+  Computer Science, University of East Anglia, Norwich, UK.</p>
+
+<p>This tutorial will introduce you to the tool's workflow.</p>
+
+
+<h3>2. User Interface Overview</h3>
+<h4>2.1 The Global Menu</h4>
+
+<span id="figure_2_1" class="figure-caption right flow-text">
+  Figure 2.1. Navigation bar icon locations.<br />
+  (1) Global menu button.<br />
+  (2) Navigation breadcrumbs (may be hidden if there is nowhere to navigate).<br />
+  (3) Homepage button.<br />
+  (4) Language select button.
+</span>
+<img src="/img/tutorials/en/navbar_location.png" alt="Navigation Bar"></img>
+
+<div class="row">
+  <p class="col l6 s12 flow-text">
+    The top <a href="#figure_2_1">navigation bar</a> consists of a set of buttons available at each of the screens of the
+    tool. On the far left, there is a global menu button: the topic of this subsection. On the right side of the
+    navigation bar, there are the home icon, which will lead you to the homepage, and the language button, which shows a
+    language selection dialog upon clicking.
+  </p>
+  <p class="col l6 s12 flow-text">
+    The <a href="#figure_2_2">global menu</a>, accessible via the global menu button in the left upper corner of the
+    screen, contains a 'log in' and 'sign up' buttons, in addition to containing your segments and their transforms
+    (see <a href="#section_6">Section 6</a> for more details). You can press the Escape button (Esc) to close the global
+    menu at any point.
+  </p>
+</div>
+
+<span id="figure_2_2" class="figure-caption right flow-text">Figure 2.2. Global menu view of an unathenticated user.</span>
+<img src="/img/tutorials/en/global_menu_empty.png" alt="Global Menu"></img>
+
+
+<h4 id="section_2_2">2.2 Signing Up and Logging In</h4>
+
+<span id="figure_2_3" class="figure-caption right flow-text">Figure 2.3. Sign up form with wrong values.</span>
+<img src="/img/tutorials/en/global_menu_sign_up_with_errors.png" alt="Sign Up With Errors"></img>
+
+<div class="row">
+  <p class="col l6 s12 flow-text">
+    The <a href="#figure_2_3">sign up</a> process is very straightforward: enter your email and password, and you are
+    done. The benefits of signing up and logging in include abilities to easily access, share and delete your segments
+    and transforms (see <a href="#section_6">Section 6</a> for more details). The password has to be at least 8 symbols
+    long and contain at least a single number. No email confirmation required.
+  </p>
+  <p class="col l6 s12 flow-text">
+    The <a href="#figure_2_4">login</a> process is as straightforward as the sign up process. Be aware that there is
+    currently no way to restore your password, so please so not lose it.
+  </p>
+</div>
+
+<span id="figure_2_4" class="figure-caption right flow-text">Figure 2.4. The login form.</span>
+<img src="/img/tutorials/en/global_menu_login.png" alt="Login"></img>
+
+
+<h4>2.3 Language Selection</h4>
+<span id="figure_2_5" class="figure-caption right flow-text">
+  Figure 2.5. The language selection box.<br />
+  (1) Available languages; click to select.<br />
+  (2) Language select button.
+</span>
+<img src="/img/tutorials/en/language_select.png" alt="Language Box"></img>
+<div class="row">
+  <p class="col l12 s12 flow-text">
+    You change the language of the tool by clicking the <a href="#figure_2_5">language button</a> and picking one of the
+    available languages.
+  </p>
+</div>
+
+
+
+<h3>3. The Segment Cut Form View</h3>
+<div class="row">
+  <div class="col l12 s12">
+    <p class="flow-text">
+      The initial screen that you see when you load the tool is the <a href="#figure_3_1">Cut Form</a>. The Cut Form
+      contains a set of fields that need to be filled in order to extract a segment (loop) from a protein's model.
+    </p>
+  </div>
+</div>
+
+
+<h4>3.1 Using Files from the Protein Databank (PDB)</h4>
+
+<span id="figure_3_1" class="figure-caption right flow-text">
+  Figure 3.1. Using a PDB code to cut a loop segment. <br />
+  (1) PDB code from the protein databank.<br />
+  (2) Name of the chain.<br />
+  (3) Starting amino acid of the segment.<br />
+  (4) Last amino acid of the segment.<br />
+  (5) The submit button to cut a segment.
+</span>
+<img src="/img/tutorials/en/cut_form_with_code.png" alt="PDB Code"></img>
+
+<div class="row">
+  <div class="col l12 s12">
+    <p class="flow-text">
+      In order to use a PDB file from the Protein Databank, all you need to do is to provide its PDB code
+      ('1adg' in the example) in the 'PDB code' field of the form. Other required parameters are:
+    </p>
+  </div>
+</div>
+
+<div class="row">
+  <ul class="col l10 offset-l1 s12 flow-text">
+    <li>
+      - <span class="text-bold">Chain</span>, which is the name of the protein's chain that you are going to use.
+      This is specified in the PDB file, and in the <a href="#figure_3_1">example</a>
+      you can see that the chain name is 'A'.
+    </li>
+    <li>
+      - <span class="text-bold">Segment Start</span>, which is the first amino acid of the segment
+      (290 in the example).
+    </li>
+    <li>
+      - <span class="text-bold">Segment End</span>, which is the last amino acid of the segment
+      (301 in the example).
+    </li>
+  </ul>
+</div>
+
+<h5 id="section_3_1_1">3.3.1 Notes</h5>
+<div class="row">
+  <div class="col l12 s12">
+    <p class="flow-text">
+      - Please note that there must be at least 4 amino acids in the segment in order for the tool's algorithm to work.<br />
+      - The name of your segment will be determined by extracting the molecule name field from the PDB file.<br />
+      - Any transform derived from your segment will be automatically shared on the main page if it was retrieved using a PDB code.<br />
+      - You can press the 'enter' button on your keyboard or click the 'submit' button in order to submit your selection.
+    </p>
+  </div>
+</div>
+
+
+<h4>3.2 Uploading Your Own PDB file</h4>
+<span id="figure_3_2" class="figure-caption right flow-text">
+  Figure 3.2. Uploading own PDB file.<br />
+  (1) Checkbox to upload own PDB file.<br />
+  (2) Name of the protein.<br />
+  (3) Custom PDB file.
+</span>
+<img src="/img/tutorials/en/cut_form_own_pdb.png" alt="Own PDB"></img>
+
+<div class="row">
+  <div class="col l12 s12">
+    <p class="flow-text">
+      On the other hand, if you would like to submit your own PDB file, you can do so by checking the
+      <a href="#figure_3_2">'Own PDB File' checkbox in the Cut Form</a>.
+        This action would change the form by disabling the PDB code input, and allowing you
+      to upload own PDB file and set a custom name for your protein. All of the points from
+      <a href="#section_3_1_1">subsection 3.1.1</a> apply to this section as well, except for the fact that you will
+      have control over sharing your transform on the main page, even if you are not logged in.
+    </p>
+  </div>
+</div>
+
+
+
+<h3>4. The Segment View</h3>
+<span id="figure_4_1" class="figure-caption right flow-text">
+  Figure 4.1. Segment View.<br />
+  (1) The share button.<br />
+  (2) The download button.<br />
+  (3) Menu button to see the transform form.
+</span>
+<img src="/img/tutorials/en/segment_view_initial.png" alt="Segment View"></img>
+
+<div class="row">
+  <div class="col l12 s12">
+    <p class="flow-text">
+      Once you have submitted your PDB file (own file with in this example), you will see the graphical protein molecule
+      viewer program, <a href="http://wiki.jmol.org/index.php/JSmol">JSmol</a>, embedded within the tool.
+      This viewer is based on <a href="http://jmol.sourceforge.net/">Jmol</a>, which might be familiar to you.
+    </p>
+  </div>
+</div>
+
+<h4 id="section_4_1">4.1 Sharing Links and Downloading</a>
+<div class="row">
+  <div class="col l12 s12">
+    <p class="flow-text">
+      The top button in the lower left corner of the screen is the <a href="#figure_4_2">Share Link</a> button.
+      It allows you to share a link to your structure with others without it appearing on the home screen.
+      Sharing happens simply by pasting the given URL into the address bar of your browser. <br />
+      The URL contains the unique ID of the segment (generated randomly), and any person who knows it is able
+      to access the segment.<br />
+      <span class="text-bold">NB! The person you have shared the link with can create a transform based
+      on your segment, and then share it on the homepage without your consent.</span>
+    </p>
+  </div>
+</div>
+
+<span id="figure_4_2" class="figure-caption right flow-text">
+  Figure 4.2. Share Dialog Window.<br />
+  (1) URL to share.<br />
+  (2) The copy to clipboard button allows to easily copy the URL.
+</span>
+<img src="/img/tutorials/en/segment_view_share.png" alt="Share Link"></img>
+
+<div class="row">
+  <div class="col l12 s12">
+    <p class="flow-text">
+      The button directly below the Share Link button is the Download button, that simply allows you to download the
+      extracted segment's PDB file. The PDB file will contain none of the metadata: only the structure will be there.
+    </p>
+  </div>
+</div>
+
+
+<h4>4.2 Temporary Storage and Navigation</h4>
+<div class="row">
+  <div class="col l12 s12">
+    <p class="flow-text">
+      All of the segments and transforms produced during one session - without refreshing the page -
+      are going to be kept in the Global Menu for convenient use. If you are not logged in, and have not shared any
+      transforms of your segment on the homepage, and did not save the URLs or IDs of your segments, you will not be
+      able to retrieve your results after refreshing the page, so please be cautious of your data. This applies bo both
+      segments and transforms.
+    </p>
+  </div>
+</div>
+<span id="figure_4_3" class="figure-caption right flow-text">
+  Figure 4.3. The Global Menu will contain all of the segments and transforms that you have created until you refresh
+  the page. See <a href="#section_6">Section 6</a> for more details on the global menu. <br />
+  (1) Segment that has just been cut.
+</span>
+<img src="/img/tutorials/en/segment_view_own_segment.png" alt="Temporary Storage"></img>
+
+<div class="row">
+  <div class="col l12 s12">
+    <p class="flow-text">
+      On the right of the Global Menu button of the Navigation Bar you will see so-called 'breadcrumbs', which allow you
+      to seamlessly move between different stages of the transform process. The leftmost breadcrumb will get you to the
+      Cut Form, where you can see the data you have entered to cut the current loop segment out. You can also change the
+      values and generate a new segment if you wish to do so. <br />
+      This functionality works identially between all of the stages.
+    </p>
+  </div>
+</div>
+<span id="figure_4_4" class="figure-caption right flow-text">
+  Figure 4.4. The breadcrumbs allow you to easily navigate between different stages of the process.<br />
+  (1) Navigational breadcrumbs to the Cut Form and the Segment View.
+</span>
+<img src="/img/tutorials/en/segment_view_navigation.png" alt="Breadcrumb Navigation"></img>
+
+
+<h4>4.3 Creating a New Transform</h4>
+<span id="figure_4_5" class="figure-caption right flow-text">Figure 4.5. The Transform Form provides you with initial
+  torsion values and allows you to target and constrain torsions.<br />
+  (1) The button to show/hide the form.<br />
+  (2) The checkbox to share the resulting transform. It will be absent if this segment is not from a custom PDB file.<br />
+  (3) The Target Torsion column allows to enter desired torsion values. Note that making it equal to the initial torsion
+      is going to effectively constrain the torsion. Leaving it blank leaves the torsion free.<br />
+  (4) Checkboxes to constrain the torsion.
+</span>
+<img src="/img/tutorials/en/segment_view_transform_form.png" alt="Segment Data"></img>
+<div class="row">
+  <div class="col l12 s12">
+    <p class="flow-text">
+      Clicking the button in the top right part of the JSmol window opens the <a href="#figure_4_5">Transform Form</a>.
+      The Transform Form gives you the initial torsion values for each of the torsions, in addition to their type and
+      amino acid ordinal in the original protein structure. <br />
+      If you have uploaded your own PDB structure, you will also have to tick the checkbox here to share your result.
+      This has to be done every time for each transform you produce based on an uploaded PDB file, whether yours or not.
+    </p>
+  </div>
+</div>
+
+<span id="figure_4_6" class="figure-caption right flow-text">Figure 4.5. Targeting psi-293 to 120 degrees (3),
+  phi-295 to 15 degrees (4), and constraining torsions phi-292 (2) and phi-296 (5). <br />
+  (1) The submit button to perform the transform.
+</span>
+<img src="/img/tutorials/en/segment_view_transform_input.png" alt="Transform Input"></img>
+<div class="row">
+  <div class="col l12 s12">
+    <p class="flow-text">
+      This is the main part of the program which allows you to enter data to tranform your segment.<br />
+      The target torsion values have to be between 180 and -180 degrees. If there are less than 6 free torsions in
+      a row, you will not be able to perform the transform. Constraining torsions is done by ticking the checkboxes next
+      to target torsion values. <br />
+      Click the submit button in the lower right part of the JSmol window to perform the transform.
+    </p>
+  </div>
+</div>
+
+
+
+<h3>5. The Transform View</h3>
+<span id="figure_5_1" class="figure-caption right flow-text">Figure 5.1. The Transform View is very similar to the
+  Segment View, apart from the fact that the transform is animated, and there is an
+  additional button (1) to pause the animation.</span>
+<img src="/img/tutorials/en/transform_view_initial.png" alt="Transform View"></img>
+<div class="row">
+  <div class="col l12 s12">
+    <p class="flow-text">
+      As soon as the transform has been calculated, the resulting animated transform will be shown to you.
+      Breadcrumbs' functions are retained, and a play/pause button will have been added. Clicking on the pause
+      button will allow you to pause the animation and see each of the frames/models of the animation one-by-one.<br />
+      Download and share button will also function as seen before in <a href="#section_4_1">Section 4.1</a>. <br />
+      If you have decided to share your result on the previous screen, by now it will have appeared on the homescreen.
+      However, if you chose a PDB from the Protein Databank using a code, the transform will have been shared
+      automatically.
+    </p>
+  </div>
+</div>
+
+<span id="figure_5_2" class="figure-caption right flow-text">Figure 5.2. Paused animation.<br />
+  (1) The play button will unpause the animation. <br />
+  (2) The range selector allows to choose individual models/frames.
+</span>
+<img src="/img/tutorials/en/transform_view_pause.png" alt="Pausing the Animation"></img>
+
+<span id="figure_5_3" class="figure-caption right flow-text">Figure 5.3. Selecting a model/frame by hand.</span>
+<img src="/img/tutorials/en/transform_view_select_frame.png" alt="Model/Frame Selection"></img>
+
+<span id="figure_5_4" class="figure-caption right flow-text">
+  Figure 5.4. The transform has been added to temporary storage. <br />
+  (1) All of your segments.<br />
+  (2) All of your transforms.
+</span>
+<img src="/img/tutorials/en/transform_view_own_transform.png" alt="Transform in the Temporary Storage"></img>
+
+<span id="figure_5_5" class="figure-caption right flow-text">Figure 5.5. Results of a transform.</span>
+<img src="/img/tutorials/en/transform_view_results.png" alt="Transform Result"></img>
+
+<div class="row">
+  <div class="col l12 s12">
+    <p class="flow-text">
+      Finally, you can see the results of the transform if you open the side panel, where the Transform Form used to
+      reside. Now it has been replaced by a set of results, where:
+    </p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col l10 offset-l1 s12">
+    <ul class="flow-text">
+      <li><span class="text-bold">#</span> is the amino acid ordinal of the protein.</li>
+      <li><span class="text-bold">Type</span> is the torsion location (phi or psi).</li>
+      <li><span class="text-bold">Initial Value</span> is the value of this torsion before the transform.</li>
+      <li><span class="text-bold">Target Value</span> is the target value of the torsion. Will only be present if provided.</li>
+      <li><span class="text-bold">Final Value</span> is the value of the torsion that the algorithm was able to come up with.</li>
+      <li><span class="text-bold">Delta</span> is the difference between the target and resulting torsions - error rate.
+        It will be 0 if the torsion has not been changed, which almost always means it has been constrained.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col l12 s12">
+    <p class="flow-text">
+      Constrained torsions are not marked, but can be detected if you take a look at identical values of the initial
+      and resulting torsions of 292-phi and 296-phi.
+    </p>
+  </div>
+</div>
+
+
+<h3 id="section_6">6. Your Segments, Transforms, and Sharing</h3>
+<div class="row">
+  <div class="col l12 s12">
+    <p class="flow-text">
+      All of the examples before were given provided that the user has not been logged in. Signing up and logging in
+      will help you to manage your segments and transforms, as discussed in <a href="#section_2_2">Section 2.2</a>.
+      <br />
+      Every one of your segments and transforms will have been saved and attached to your account if you are logged in,
+      and you will have access to sharing your transforms on the homepage, looking at your segments and transforms,
+      and also deleting them.
+    </p>
+  </div>
+</div>
+
+<span id="figure_6_1" class="figure-caption right flow-text">Figure 6.1. User's segments are shown in the Global Menu
+  at all times if they are logged in. <br />
+  (1) Column of view <i class="material-icons">all_out</i> buttons. <br />
+  (2) Column of context <i class="material-icons">more_vert</i> buttons. <br />
+  (3) The log out button.
+</span>
+<img src="/img/tutorials/en/user_segments.png" alt="User's Segments"></img>
+<div class="row">
+  <div class="col l12 s12">
+    <p class="flow-text">
+      Clicking on the 'expand' icon will redirect you to the segment/transform you have selected, while clicking on a
+      segment itself will show all of your transforms derived from a particular segment.
+      <br />
+      The 'three dots' button allows you to access the context menu, where you can perform the next actions: <br /><br />
+        - <span class="text-bold">Share Link</span> to the segment/transform. <br />
+        - <span class="text-bold">Download</span> the segment/transform. <br />
+        - <span class="text-bold">Delete</span> the segment/transform (will only work if you are logged in).
+          Requires a <span class="text-bold">long click</span>. <br />
+        - <span class="text-bold">Share on Homepage</span> the transform. This will only show up if the transform is yet
+          to be shared. Requires a <span class="text-bold">long click</span>. <br />
+      <br />
+      Even though your data will be saved if you are logged in, it is not foolproof. You might be logged out during your
+      session, and you will have to click the 'log out' button, followed by a log in to fix the potential issue. You
+      will be logged out automatically after each server restart, 1 month, or each time you change your browser or clear
+      your cookies.
+    </p>
+  </div>
+</div>
+<span id="figure_6_2" class="figure-caption right flow-text">Figure 6.2. Global Menu's context menu. <br />
+  (1) Column of view <i class="material-icons">all_out</i> buttons. <br />
+  (2) Column of context <i class="material-icons">more_vert</i> buttons. <br />
+  (3) The context menu's download <i class="material-icons">file_download</i> button. <br />
+  (4) The context menu's share <i class="material-icons">share</i> button. <br />
+  (5) The context menu's delete <i class="material-icons">delete_forever</i> button (long click).
+</span>
+<img src="/img/tutorials/en/user_data_management.png" alt="Context Menu"></img>
+
+
+<h3>7. Browser Compatibility</h3>
+<p class="flow-text">Please bear in mind that mobile devices are not supported.</p>
+<table class="striped centered mar-bottom">
+  <thead>
+    <tr>
+      <th>Browser</th>
+      <th>Tested Version</th>
+      <th>Supported</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://www.google.com/chrome/" target="_blank">Google Chrome</a></td>
+      <td>57.0.2987.11057.0.2987.110</td>
+      <td class="green">Yes</td>
+    </tr>
+    <tr>
+      <td><a href="http://www.mozilla.org/firefox" target="_blank">Mozilla Firefox</a></td>
+      <td>52.0</td>
+      <td class="green">Yes</td>
+    </tr>
+    <tr>
+      <td><a href="http://www.opera.com/" target="_blank">Opera</a></td>
+      <td>44.0.2510.857</td>
+      <td class="green">Yes</td>
+    </tr>
+  </tbody>
+</table>

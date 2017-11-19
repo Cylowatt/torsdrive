@@ -1,0 +1,107 @@
+<div class="row form-row mar-top" id="cut-form">
+  <form class="col s12 l8 offset-l2" name="cutForm">
+
+    <!-- PDB code and own PDB checkbox. Valid if toched, provided and not uploading own PDB. -->
+    <div class="row">
+      <div class="input-field col s8 l8 tooltipped" data-position="bottom" data-delay="25"
+           data-tooltip="{{aVars.lang.cutFormPdbCodeTooltip}}">
+        <input placeholder="{{aVars.lang.cutFormPdbCodePlaceholder}}" id="cut_pdb_code" type="text"
+          ng-model="aVars.modifiedSegment.pdbCode" name="pdbCode" ng-disabled="aVars.modifiedSegment.ownPdb"
+          ng-required="!aVars.modifiedSegment.ownPdb"
+          ng-class="[{valid: cutForm.pdbCode.$touched && cutForm.pdbCode.$valid && !aVars.modifiedSegment.ownPdb},
+                     {invalid: cutForm.pdbCode.$touched && cutForm.pdbCode.$invalid && !aVars.modifiedSegment.ownPdb}]"/>
+        <label for="cut_pdb_code" data-error="{{aVars.lang.cutFormEmptyWarning}}">{{aVars.lang.cutFormPdbCode}}</label>
+      </div>
+      <div class="input-field col s4 l4 tooltipped" data-position="bottom" data-delay="25"
+           data-tooltip="{{aVars.lang.cutFormCheckboxToolip}}">
+        <input type="checkbox" class="filled-in" id="cut_own_pdb_checkbox" ng-model="aVars.modifiedSegment.ownPdb"/>
+        <label for="cut_own_pdb_checkbox">{{aVars.lang.cutFormOwnPdb}}</label>
+      </div>
+    </div>
+
+    <!-- Name of own PDB. -->
+    <div class="row" ng-show="aVars.modifiedSegment.ownPdb">
+      <div class="input-field col s12 tooltipped" data-position="bottom" data-delay="25" data-tooltip="{{aVars.lang.cutFormPdbNameTooltip}}">
+        <input placeholder="{{aVars.lang.cutFormPdbNamePlaceholder}}" id="own_pdb_name" type="text"
+          ng-model="aVars.modifiedSegment.name" name="ownName" ng-required="aVars.modifiedSegment.ownPdb" ng-class="
+            [{valid: cutForm.ownName.$touched && cutForm.ownName.$valid && aVars.modifiedSegment.ownPdb},
+            {invalid: cutForm.ownName.$touched && cutForm.ownName.$invalid && aVars.modifiedSegment.ownPdb}]
+          "/>
+        <label for="own_pdb_name" data-error="{{aVars.lang.cutFormEmptyWarning}}">{{aVars.lang.cutFormPdbName}}</label>
+      </div>
+    </div>
+
+
+    <!-- Own PDB input field. -->
+    <div class="row" ng-show="aVars.modifiedSegment.ownPdb">
+      <div class="file-field input-field col s12 l12">
+        <div class="btn">
+          <span>{{aVars.lang.cutFormPdbFile}}</span><input id="ownPdbFile" type="file" name="files[]">
+        </div>
+        <div class="file-path-wrapper">
+          <input class="file-path validate" type="text">
+        </div>
+      </div>
+    </div>
+
+    <!-- Chain name, segment beginning and segment end. -->
+    <div class="row">
+
+      <!-- Chain name. Valid if provided. -->
+      <div class="input-field col s4 l4 tooltipped" data-position="bottom" data-delay="25"
+           data-tooltip="{{aVars.lang.cutFormChainTooltip}}">
+        <input placeholder="{{aVars.lang.cutFormChainNamePlaceholder}}" name="cutChain" id="cut_chain" type="text"
+               ng-model="aVars.modifiedSegment.chain" required
+               ng-class="[{valid: cutForm.cutChain.$valid},
+                          {invalid: cutForm.cutChain.$invalid}]">
+        <label for="cut_chain" data-error="{{aVars.lang.cutFormEmptyWarning}}">{{aVars.lang.cutFormChainName}}</label>
+      </div>
+
+      <!-- Segment start. Valid if touched, provided, and positive.  -->
+      <div class="input-field col s4 l4 tooltipped" data-position="bottom" data-delay="25"
+           data-tooltip="{{aVars.lang.cutFormStartTooltip}}">
+        <input placeholder="{{aVars.lang.cutFormNumberPlaceholder}}" id="cut_segment_start" type="number"
+          ng-model="aVars.modifiedSegment.start" required name="segStart" positive-integer
+            ng-class="[{valid: cutForm.segStart.$touched && cutForm.segStart.$valid},
+                      {invalid: cutForm.segStart.$touched &&  cutForm.segStart.$invalid}]">
+        <label for="cut_segment_start" data-error="{{aVars.lang.cutFormPositiveIntegerWarning}}">
+          {{aVars.lang.cutFormSegmentStart}}</label>
+      </div>
+
+      <!-- Segment end. Valid if touched, provided, positive and bigger than the segment start. -->
+      <div class="input-field col s4 l4 tooltipped" data-position="bottom" data-delay="25"
+           data-tooltip="{{aVars.lang.cutFormEndTooltip}}">
+        <input placeholder="{{aVars.lang.cutFormNumberPlaceholder}}" id="cut_segment_end" type="number"
+               ng-model="aVars.modifiedSegment.end" required positive-integer name="segEnd"
+          ng-class="[{invalid: (cutForm.segEnd.$touched && cutForm.segEnd.$invalid) || (cutForm.segEnd.$touched && cutForm.segStart.$touched) && aVars.modifiedSegment.start >= aVars.modifiedSegment.end},
+                     {valid: (cutForm.segEnd.$touched && cutForm.segEnd.$valid) || aVars.modifiedSegment.start < aVars.modifiedSegment.end}]">
+        <label for="cut_segment_end" data-error="{{aVars.lang.cutFormSegmentEndWarning}}">{{aVars.lang.cutFormSegmentEnd}}</label>
+      </div>
+
+      <span class="red-text text-darken-2" ng-if="aVars.modifiedSegment.end - aVars.modifiedSegment.start > 30">{{aVars.lang.cutFormHighRangeError}}</span>
+
+      <span class="red-text text-darken-2" ng-if="
+      aVars.modifiedSegment.end - aVars.modifiedSegment.start > 0
+      &&
+      aVars.modifiedSegment.end - aVars.modifiedSegment.start < 4"
+      >{{aVars.lang.cutFormLowRangeError}}</span>
+
+      <span class="yellow-text text-darken-2" ng-if="
+      aVars.modifiedSegment.end - aVars.modifiedSegment.start >= 15
+      &&
+      aVars.modifiedSegment.end - aVars.modifiedSegment.start <= 30
+      ">{{aVars.lang.cutFormHighRangeWarning}}</span>
+    </div>
+
+    <!-- Submit button. Enabled if the form has been touched and has no invalid values. -->
+    <div class="row">
+      <button ng-click="segmentCut()" class="btn waves-effect waves-light right" id="tors-form-send-button"
+      ng-disabled="
+        cutForm.$pristine || cutForm.$invalid || aVars.modifiedSegment.start >= aVars.modifiedSegment.end ||
+        (aVars.modifiedSegment.end - aVars.modifiedSegment.start) > 30 ||
+        (aVars.modifiedSegment.end - aVars.modifiedSegment.start) < 4
+      ">
+      {{aVars.lang.submit}}<i class="material-icons right">send</i></button>
+    </div>
+  </form>
+</div>

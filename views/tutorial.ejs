@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <% include ./partials/head_shared %>
+    <script src="/js/tutorial.js"></script>
+  </head>
+  <body>
+    <div ng-app="loopServer" ng-controller="tutorialController">
+      <div class="navbar-fixed">
+        <nav>
+          <div class="nav-wrapper white">
+            <ul>
+              <li>
+                <img onclick="window.open('http://www.uea.ac.uk/');" id="navbar-uea-logo" class="mar-left" src="/img/UEA_NEW_BRAND_Light_Grey.png" alt="UEA Logo"></img>
+              </li>
+            </ul>
+
+            <ul class="right">
+              <li><a href="/" target="_blank" class="black-text">Home</a></li>
+              <li><a href="/tool" target="_blank" class="black-text">Loop Driving Tool</a></li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+
+      <!-- The content will be loaded in here depending on the language used. -->
+      <div class="container mar-top" id="tutorial-content">
+
+      </div>
+    </div>
+  </body>
+</html>

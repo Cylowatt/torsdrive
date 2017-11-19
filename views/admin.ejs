@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <% include ./partials/head_admin %>
+  </head>
+  <body>
+    <div ng-app="loopServer" ng-controller="adminController" id="ang-container">
+      <% include ./partials/modals_admin %>
+
+      <div class="container" ng-show="aVars.user.isAdmin">
+        <div class="progress" ng-if="aVars.loading">
+          <div class="indeterminate"></div>
+        </div>
+        <div class="row">
+          <div class="s12">
+            <h3>Administrator Page</h3>
+            <p>You can view and edit users' accounts here.</p>
+          </div>
+        </div>
+
+        <div class="row">
+          <table id="table-main-share" class="striped centered col s12">
+            <thead>
+              <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Preferred Language</th>
+                <th>Role</th>
+                <th>Edit</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="(id, user) in aVars.users">
+                <td>{{(user.email === aVars.user.email ? '(You) ' : '') +  user.username}}</td>
+                <td>{{user.email}}</td>
+                <td>{{user.preferredLanguage ? user.preferredLanguage : 'N/A'}}</td>
+                <td>{{user.role}}</td>
+                <td>
+                  <a href="#!"><i class="material-icons pad-side-tiny" ng-click="func.editUser(user);">edit</i></a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

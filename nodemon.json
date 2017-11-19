@@ -1,0 +1,6 @@
+{
+  "verbose": true,
+  "ignore": ["matlab/*", "pdb/*", "public/*", ".gitignore", "*.ejs"],
+  "ext": "js json scss",
+  "exec": "npm run build-css && npm run start"
+}

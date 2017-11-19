@@ -1,0 +1,178 @@
+  <!-- Overlay for the side bar. -->
+  <div id="navbar-overlay">
+    <div id="sidebar-container" class="no-padding">
+
+      <!-- Context menu with actions. -->
+      <div id="user-buttons-context-menu">
+        <span id="context-menu-current-type" ng-model="aVars.view.contextMenuType"></span>
+        <span id="context-menu-current-id"   ng-model="aVars.view.contextMenuId"></span>
+        <span id="context-menu-current-meta" ng-model="aVars.view.contextMenuMeta"></span>
+        <div class="collection">
+          <a href="#!" class="collection-item" ng-click="
+            func.view.hideNavbarContextMenu();
+            func.downloadPdb(aVars.view.contextMenuType, aVars.view.contextMenuId, aVars.view.contextMenuMeta);
+          ">{{aVars.lang.navbarDownload}}<i class="material-icons secondary-content">file_download</i></a>
+
+          <a href="#!" class="collection-item" ng-click="
+            func.view.hideNavbarContextMenu();
+            func.sharePdb(aVars.view.contextMenuType, aVars.view.contextMenuId);
+          ">{{aVars.lang.navbarShare}}<i class="material-icons secondary-content">share</i></a>
+
+          <a href="#!" class="collection-item tooltipped" data-position="right" data-delay="0"
+          data-tooltip="{{aVars.lang.navbarTooltipLongClickDelete}}" on-long-press="
+              func.view.hideNavbarContextMenu();
+              func.deletePdb(aVars.view.contextMenuType, aVars.view.contextMenuId);
+          ">{{aVars.lang.navbarDelete}}<i class="material-icons secondary-content">delete_forever</i></a>
+
+          <a href="#!" ng-if="
+              aVars.view.contextMenuType === 'transform' &&
+              !aVars.userSegments[aVars.view.selectedNavbarSegment.id].transforms[aVars.view.contextMenuId].showOnMain"
+            class="collection-item tooltipped" data-position="right" data-delay="0"
+            on-long-press="func.shareTransformOnMain(aVars.view.selectedNavbarSegment.id, aVars.view.contextMenuId);"
+            data-tooltip="{{aVars.lang.navbarTooltipLongClickShareOnMain}}">{{aVars.lang.navbarShareOnMain}}
+            <i class="material-icons secondary-content">public</i></a>
+        </div>
+      </div>
+
+
+      <div id="left-navbar">
+        <div id="user-buttons">
+          <button class="waves-effect waves-light btn" data-target="modal-form-login" ng-show="!aVars.user.loggedIn"
+            ng-click="func.view.hideNavbarContextMenu();">{{aVars.lang.loginButton}}
+          </button>
+          <button class="waves-effect waves-light btn" data-target="modal-form-signup" ng-show="!aVars.user.loggedIn"
+            ng-click="func.view.hideNavbarContextMenu(); aVars.user.email = ''">{{aVars.lang.signUpButton}}
+          </button>
+          <button class="waves-effect waves-light btn" ng-show="aVars.user.loggedIn" ng-click="func.logout()">
+            {{aVars.lang.logoutButton}}
+          </button>
+        </div>
+
+        <div class="collection with-header scrollable">
+          <h4 class="collection-header no-margin">{{aVars.lang.navbarUserPdbFiles}}</h4>
+
+          <a href="#!" ng-repeat="cut in aVars.userSegments" class="collection-item row pad-half" id="pdb-{{cut.id}}"
+            ng-click="func.view.showTransformSideNavbar(cut.id); func.getSegmentTransforms(cut.id);"
+            ng-class="{active: aVars.view.selectedNavbarSegment.id === cut.id}">
+            <div class="col s9">
+              <span>{{cut.name === null ? cut.pdbCode : cut.name + ' (' + cut.start + '-' + cut.end +')' }}</span>
+            </div>
+            <div class="col s3">
+              <i class="material-icons secondary-content pad-side-tiny" ng-click="
+                $event.stopPropagation();
+                func.showContextMenu($event, 'segment', cut.id, cut.name);
+              ">more_vert</i>
+              <i class="material-icons secondary-content pad-side-tiny" ng-click="
+                $event.stopPropagation();
+                func.view.hideSideNavbar();
+                func.view.segmentStage(cut.id);
+              ">all_out</i>
+            </div>
+          </a>
+
+          <div class="padding-div"></div>
+        </div>
+      </div>
+
+      <div id="transform-navbar">
+        <div class="collection with-header scrollable">
+          <h4 class="collection-header no-margin">{{aVars.lang.navbarPrevTransforms}}</h4>
+          <a href="#" ng-repeat="tra in aVars.view.selectedNavbarSegment.transforms"
+            class="collection-item pad-half row" id="tra-{{tra.id}}"
+            ng-class="{active: aVars.view.selectedNavbarTransform.id === tra.id}">
+            <div class="col s9">
+              <span>{{tra.name}}</span>
+            </div>
+            <div class="col s3">
+              <i class="material-icons secondary-content pad-side-tiny" ng-click="
+                $event.stopPropagation();
+                func.showContextMenu($event, 'transform', tra.id, tra.name);
+              ">more_vert</i>
+              <i class="material-icons secondary-content pad-side-tiny" ng-click="
+                $event.stopPropagation();
+                aVars.currentTransform = tra;
+                transformStage(aVars.view.selectedNavbarSegment.id, tra.id);
+                func.view.hideSideNavbar();
+                aVars.view.showTorsionForm = false;
+                aVars.view.showTransformDetails = true;
+              ">all_out</i>
+            </div>
+          </a>
+          <div class="padding-div"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="navbar-canceller" ng-click="func.view.hideSideNavbar()"></div>
+    <div id="context-menu-canceller" ng-click="func.view.hideNavbarContextMenu()"></div>
+  </div>
+
+
+  <!-- Language box. -->
+  <div id="lang-box-container" onclick="view.hideLanguageBox()">
+    <div id="lang-box-inner-container" class="row">
+      <div class="col s3 offset-s9">
+        <div class="card white" id="lang-box">
+          <div class="card-content black-text">
+            <span class="card-title">{{aVars.lang.navbarLangChoice}}</span>
+          </div>
+          <div class="collection">
+            <a ng-repeat="(code, name) in aVars.availableLanguages" href="#!" class="collection-item center-align"
+              ng-click="func.loadLanguage(code);">{{name}}</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Navigation bar. -->
+  <div class="navbar-fixed" id="navbar-top">
+    <nav>
+      <div class="nav-wrapper deep-purple darken-1">
+        <ul>
+          <li><a href="#" onclick="view.showSideNavbar()"
+                 class="tooltipped"
+                 data-position="right"
+                 data-delay="250"
+                 data-tooltip="{{aVars.lang.navbarTooltipMenu}}">
+            <i class="material-icons">menu</i>
+          </a></li>
+        </ul>
+
+        <!--a href="/" target="_blank" class="brand-logo center truncate">
+          {{aVars.lang.navbarToolName}}
+        </a-->
+
+        <a href="#!" class="breadcrumb" id="cutformBreadcrumb" ng-click="func.view.toCutForm();"
+          ng-class="[{'white-text': aVars.view.currentStage === 0}]">
+          {{aVars.lang.breadcrumbCutForm}}
+        </a>
+
+        <a href="#!" class="breadcrumb" ng-if="aVars.currentSegment.torsions" id="segmentBreadcrumb"
+          ng-class="[{'white-text': aVars.view.currentStage === 1}]" ng-click="func.toSegment();">
+          {{aVars.lang.breadcrumbSegmentView}}
+        </a>
+
+        <a href="#!" class="breadcrumb"
+           ng-if="aVars.currentSegment.torsions && aVars.currentTransform.numModels && aVars.currentTransform.numModels > 0"
+           ng-class="[{'white-text': aVars.view.currentStage === 2}]" id="transformBreadcrumb" ng-click="func.toTransform();">
+           {{aVars.lang.breadcrumbTransformView}}
+         </a>
+
+        <ul class="right">
+          <li><a href="/" target="_blank">
+            <i class="material-icons" alt="Home" class="navbar-image">home</i>
+          </a></li>
+
+          <li><a href="#!" onclick="view.showLanguageBox()"
+                     class="tooltipped"
+                     data-position="left"
+                     data-delay="250"
+                     data-tooltip="{{aVars.lang.navbarTooltipChangeLanguage}}">
+                <i class="material-icons" alt="Language" id="translate-button" class="navbar-image">translate</i>
+          </a></li>
+        </ul>
+      </div>
+    </nav>
+  </div>

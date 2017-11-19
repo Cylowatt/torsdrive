@@ -1,0 +1,75 @@
+<div id="modal-share" class="modal">
+  <div class="modal-content">
+    <h4 ng-click="func.copyToClipboard(aVars.view.sharedUrl)">{{aVars.lang.modalShareTitle}}</h4>
+    <form>
+      <input class="grey-text text-darken-3" type="text" ng-model="aVars.view.sharedUrl" disabled/>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button class="modal-action modal-close waves-effect waves-green btn-flat">{{aVars.lang.modalDoneButton}}</button>
+    <button class="waves-effect waves-green btn-flat" ng-click="func.copyToClipboard(aVars.view.sharedUrl)">
+      {{aVars.lang.modalCopyToClipboardButton}}</button>
+  </div>
+</div>
+
+<div id="modal-form-login" class="modal">
+  <div class="modal-content">
+    <h4>{{aVars.lang.loginPrompt}}</h4>
+      <form id="login-form" class="row mar-top modal-form" name="loginForm">
+
+          <div class="col s4 offset-s2">
+            <label for="loginFormEmailInput">{{aVars.lang.loginUsername}}</label>
+            <input type="email" ng-model="aVars.user.email" id="loginFormEmailInput"/>
+          </div>
+
+          <div class="col s4">
+            <label for="loginFormPasswordInput">{{aVars.lang.loginPassword}}</label>
+            <input type="password" ng-model="aVars.user.password" id="loginFormPasswordInput"/>
+          </div>
+
+      </form>
+  </div>
+  <div class="modal-footer">
+    <button class="modal-action modal-close waves-effect waves-green btn-flat">{{aVars.lang.cancelButton}}</button>
+    <button class="modal-action waves-effect waves-green btn-flat" ng-click="func.login()">{{aVars.lang.loginButton}}</button>
+  </div>
+</div>
+
+<div id="modal-form-signup" class="modal">
+  <div class="modal-content">
+    <h4>{{aVars.lang.signUpPrompt}}</h4>
+    <form id="signup-form" class="row mar-top modal-form" name="signupForm">
+
+        <div class="col s4 offset-s2">
+          <label for="signupFormEmailInput">{{aVars.lang.signUpUsername}}</label>
+          <input ng-class="[{valid: signupForm.signupFormEmail.$dirty && signupForm.signupFormEmail.$valid,
+            invalid: signupForm.signupFormEmail.$dirty && signupForm.signupFormEmail.$invalid}]" type="email" name="signupFormEmail" ng-model="aVars.user.email" id="signupFormEmailInput" required/>
+        </div>
+
+        <div class="col s4">
+          <label for="signupFormPasswordInput">{{aVars.lang.signUpPassword}}</label>
+          <input type="password" name="signupFormPassword" ng-model="aVars.user.password" id="signupFormPasswordInput"
+          ng-class="[{valid: signupForm.signupFormPassword.$dirty && signupForm.signupFormPassword.$valid,
+            invalid: signupForm.signupFormPassword.$dirty && signupForm.signupFormPassword.$invalid}]"
+            minimum-strength-password required/>
+        </div>
+
+    </form>
+
+    <div class="row">
+      <span class="red-text text-darken-2" ng-if="
+        signupForm.signupFormEmail.$dirty && signupForm.signupFormEmail.$invalid
+        ">{{aVars.lang.errSignUpEmailFormat}}</span>
+    </div>
+    <div class="row">
+      <span class="red-text text-darken-2" ng-if="
+        signupForm.signupFormPassword.$dirty && signupForm.signupFormPassword.$invalid
+        ">{{aVars.lang.errSignUpPassword}}</span>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="modal-action modal-close waves-effect waves-green btn-flat">{{aVars.lang.cancelButton}}</button>
+    <button ng-disabled="signupForm.signupFormEmail.$invalid || signupForm.signupFormPassword.$invalid"
+      class="modal-action modal-close waves-effect waves-green btn-flat" ng-click="func.signUp()">{{aVars.lang.signUpButton}}</button>
+  </div>
+</div>

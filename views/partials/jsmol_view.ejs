@@ -1,0 +1,131 @@
+<div class="col s6" id="jsmol-container">
+  <a href="#" class="btn-floating btn-large waves-effect waves-light teal tooltipped" id="form-open-button"
+     data-position="left" data-delay="50" data-tooltip="{{aVars.lang.jsmolViewTooltipToggleWindow}}"
+    onclick="view.toggleRightBar()">
+    <i class="material-icons">menu</i>
+  </a>
+
+  <a href="#" class="btn-floating btn-large waves-effect waves-light teal tooltipped" id="current-download-button"
+  ng-click="func.downloadCurrentPdb()" data-position="right" data-delay="50" data-tooltip="{{aVars.lang.jsmolViewTooltipDownload}}">
+    <i class="material-icons">file_download</i>
+  </a>
+
+  <a href="#" class="btn-floating btn-large waves-effect waves-light teal tooltipped" id="current-share-button"
+  ng-click="func.shareCurrentPdb()" data-position="right" data-delay="50" data-tooltip="{{aVars.lang.jsmolViewTooltipShare}}">
+    <i class="material-icons">share</i>
+  </a>
+
+  <button class="btn waves-effect waves-light" id="tors-form-send-button-l" ng-click="segmentTransform();">
+    {{aVars.lang.submit}}<i class="material-icons right">send</i>
+  </button>
+
+  <form action="#">
+    <p class="range-field tooltipped" id="animation-range" data-position="top" data-delay="250" data-tooltip="{{aVars.lang.jsmolViewTooltipRange}}">
+      <input type="range" min="1" max="{{aVars.currentTransform.numModels}}" ng-model="aVars.view.jsmolModel"
+             ng-change="func.view.detectJsmolRangeChange()" ng-show="!aVars.view.jsmolPlay"/>
+    </p>
+    <a href="#" class="btn-floating btn-large waves-effect waves-light teal" id="play-pause-button" ng-click="func.view.toggleJsmolPlay()">
+      <i class="material-icons">{{aVars.view.jsmolPlay ? 'pause' : 'play_arrow'}}</i>
+    </a>
+  </form>
+
+  <div id="jsmol"></div>
+</div>
+
+<div class="col s6" id="movement-entry-form-container">
+  <div class="row form-row height100">
+    <form class="col s12" id="torsion-form" ng-show="aVars.view.showTorsionForm">
+      <div class="row">
+        <div class="col s9">
+          <h5>
+            {{aVars.lang.torsionFormProtein}}
+
+            {{aVars.currentSegment.pdbCode ?
+              aVars.currentSegment.name + '(' + aVars.currentSegment.pdbCode + ')' :
+              aVars.currentSegment.name}},
+
+            {{aVars.lang.torsionFormChain}} {{aVars.currentSegment.chain}},
+            {{aVars.lang.torsionFormSegment}} {{aVars.currentSegment.start}}-{{aVars.currentSegment.end}}
+          </h5>
+        </div>
+        <div class="col s3">
+          <div ng-if="!aVars.currentSegment.shared" class="input-field tooltipped" data-position="left" data-delay="25"
+               data-tooltip="{{aVars.lang.torsionFormTooltipShareOnMain}}">
+            <input type="checkbox" class="filled-in" id="show_on_main_checkbox" ng-model="aVars.showOnMain"/>
+            <label for="show_on_main_checkbox">{{aVars.lang.torsionFormShareOnMain}}</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Header -->
+      <div class="row">
+        <div class="col s2 center-align">{{aVars.lang.formHeaderNumber}}</div>
+        <div class="col s2 center-align">{{aVars.lang.formHeaderType}}</div>
+        <div class="col s3 center-align">{{aVars.lang.torsionFormHeaderStart}}</div>
+        <div class="col s3">{{aVars.lang.torsionFormHeaderEnd}}</div>
+        <div class="col s2 right-align">{{aVars.lang.torsionFormHeaderConstrain}}</div>
+      </div>
+
+      <!-- Dynamically created rows. -->
+      <div ng-repeat="torsion in aVars.currentSegment.torsions" class="row">
+         <div class="input-field col s2">
+           <input disabled class="center-align black-text" value="{{torsion.num}}" type="text"
+           id="resnum_{{torsion.num}}" />
+         </div>
+         <div class="input-field col s2">
+           <input disabled class="center-align black-text"
+                  value="{{torsion.type.toLowerCase() === 'phi' ? aVars.lang.typePhi : aVars.lang.typePsi}}" type="text" />
+         </div>
+         <div class="input-field col s3">
+           <input disabled class="center-align black-text" value="{{torsion.value}}" type="text" />
+         </div>
+         <div class="input-field col s4">
+           <input placeholder="{{torsion.constrained ? aVars.lang.torsionFormConstrained : aVars.lang.torsionFormFree}}" type="number"
+             ng-model="torsion.newValue" ng-disabled="torsion.constrained"
+             id="end_{{torsion.num}}"
+             ng-class="{invalid: torsion.newValue > 180 || torsion.newValue < -180}" />
+         </div>
+         <div class="input-field col s1 const-checkbox">
+           <input type="checkbox" class="filled-in" ng-model="torsion.constrained"
+            id="{{torsion.type + '-' + torsion.num}}" />
+           <label for="{{torsion.type + '-' + torsion.num}}"></label>
+         </div>
+
+         <span class="col s12 red-text text-darken-2 right-align"
+           ng-if="!torsion.constrained && (torsion.newValue > 180 || torsion.newValue < -180)">
+           {{aVars.lang.errDegreeRange}}
+         </span>
+
+       </div>
+    </form>
+
+
+    <div ng-show="aVars.view.showTransformDetails">
+      <div class="row">
+        <div class="col s2 center-align">{{aVars.lang.formHeaderNumber}}</div>
+        <div class="col s2 center-align">{{aVars.lang.formHeaderType}}</div>
+        <div class="col s2 center-align">{{aVars.lang.transformDataHeaderInitialTorsion}}</div>
+        <div class="col s2 center-align">{{aVars.lang.transformDataHeaderRequestedTorsion}}</div>
+        <div class="col s2 center-align">{{aVars.lang.transformDataHeaderResultTorsion}}</div>
+        <div class="col s2 center-align">{{aVars.lang.transformDataHeaderTorsionDeviation}}</div>
+      </div>
+
+      <div ng-repeat="metaRow in aVars.currentTransform.transformMeta" class="row">
+        <div class="col s2 center-align">{{metaRow.num}}</div>
+        <div class="col s2 center-align">{{metaRow.type.toLowerCase() === 'phi' ? aVars.lang.typePhi : aVars.lang.typePsi}}</div>
+        <div class="col s2 center-align">{{aVars.currentSegment.torsions[$index].value | number: 4}}</div>
+        <div class="col s2 center-align">{{ (metaRow.requestedTorsion == 0 && metaRow.deviation == 0) ? '' : metaRow.requestedTorsion }}</div>
+        <div class="col s2 center-align">{{metaRow.resultTorsion}}</div>
+        <div class="col s2 center-align">
+          {{
+            aVars.currentSegment.torsions[$index].value - metaRow.resultTorsion < 0 ?
+              ((aVars.currentSegment.torsions[$index].value - metaRow.resultTorsion) * -1).toFixed(4)
+              :
+              (aVars.currentSegment.torsions[$index].value - metaRow.resultTorsion).toFixed(4)
+          }}
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

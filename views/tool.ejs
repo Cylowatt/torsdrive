@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <% include ./partials/head_tool %>
+  </head>
+  <body>
+    <div ng-app="loopServer" ng-controller="loopController" id="ang-container">
+      <% include ./partials/modals %>
+
+      <% include ./partials/navbar %>
+      <% include ./partials/loading_card %>
+
+      <div id="screen-protein-cut-form">
+        <% include ./partials/protein_cut_form %>
+      </div>
+
+      <div id="jsmol-view" class="row">
+        <% include ./partials/jsmol_view %>
+      </div>
+    </div>
+    <script>
+      var _lang = <% include ../public/lang/en.json %>;
+    </script>
+  </body>
+</html>

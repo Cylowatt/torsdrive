@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <% include ./partials/head_generic %>
+  </head>
+  <body>
+    <div ng-app="loopServer" ng-controller="genericController" id="ang-container" data-ng-init="func.loadAllTransforms(); func.loadAvailableLanguages();">
+
+      <% include ./partials/modals.ejs %>
+
+      <div class="navbar-fixed">
+        <nav>
+          <div class="nav-wrapper white">
+            <ul>
+              <li>
+                <img onclick="window.open('http://www.uea.ac.uk/');" id="navbar-uea-logo" class="mar-left" src="/img/UEA_NEW_BRAND_Light_Grey.png" alt="UEA Logo"></img>
+              </li>
+            </ul>
+
+            <ul class="right">
+              <li><a href="/tutorial?lang={{aVars.lang.id}}" target="_blank" class="black-text">{{aVars.lang.homeNavbarTutorial}}</a></li>
+              <li><a href="/tool" target="_blank" class="red-text">{{aVars.lang.homeNavbarTool}}</a></li>
+
+              <li><a href="#!" ng-click="func.view.showLanguageBox();"
+                         class="tooltipped"
+                         data-position="left"
+                         data-delay="250"
+                         data-tooltip="{{aVars.lang.navbarTooltipChangeLanguage}}">
+                <i class="material-icons black-text" alt="Language" id="translate-button" class="navbar-image">translate</i>
+              </a></li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+
+      <!-- Language box. -->
+      <div id="lang-box-container" ng-click="func.view.hideLanguageBox();">
+        <div id="lang-box-inner-container" class="row">
+          <div class="col s3 offset-s9">
+            <div class="card white" id="lang-box">
+              <div class="card-content black-text">
+                <span class="card-title">{{aVars.lang.navbarLangChoice}}</span>
+              </div>
+              <div class="collection">
+                <a ng-repeat="(code, name) in aVars.availableLanguages" href="#!" class="collection-item center-align"
+                  ng-click="func.loadLanguage(code);">{{name}}</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="container">
+        <div class="progress" ng-if="aVars.loading">
+          <div class="indeterminate"></div>
+        </div>
+
+        <div class="row">
+          <div class="s12">
+            <h3>{{aVars.lang.homeTitle}}</h3>
+            <p>{{aVars.lang.homeSubtitle}}</p>
+            <p>{{aVars.lang.homePaperRef}}:
+              <a href="http://www.cell.com/biophysj/fulltext/S0006-3495(10)00147-5" target="_blank">
+                http://www.cell.com/biophysj/fulltext/S0006-3495(10)00147-5
+              </a>
+            </p>
+          </div>
+        </div>
+
+        <div class="row">
+
+          <table id="table-main-share" class="striped centered col s12">
+
+            <thead>
+              <tr>
+                <th>{{aVars.lang.homeTableProteinName}}</th>
+                <th>{{aVars.lang.homeTablePdbCode}}</th>
+                <th>{{aVars.lang.homeTableSegStart}}</th>
+                <th>{{aVars.lang.homeTableSegEnd}}</th>
+                <th>{{aVars.lang.homeTableChainName}}</th>
+                <th>{{aVars.lang.homeTableTransform}}</th>
+                <th>{{aVars.lang.homeTableBaseSegment}}</th>
+                <th>{{aVars.lang.homeTableDateCreated}}</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr ng-repeat="tra in aVars.transforms | orderBy: 'dateCreated' : true">
+                <td>{{tra.proteinName ? tra.proteinName : aVars.lang.homeTableNotApplicable}}</td>
+                <td>{{tra.pdbCode     ? tra.pdbCode     : aVars.lang.homeTableNotApplicable}}</td>
+                <td>{{tra.start       ? tra.start       : aVars.lang.homeTableNotApplicable}}</td>
+                <td>{{tra.end         ? tra.end         : aVars.lang.homeTableNotApplicable}}</td>
+                <td>{{tra.chain       ? tra.chain       : aVars.lang.homeTableNotApplicable}}</td>
+                <td>
+                  <a href="/tool?transform={{tra.transformId}}" target="_blank">{{aVars.lang.homeTableLink}}</a>
+                </td>
+                <td>
+                  <a href="/tool?segment={{tra.segmentId}}" target="_blank">{{aVars.lang.homeTableSegmentLink}}</a>
+                </td>
+                <td>{{tra.dateCreated ? (tra.dateCreated | date:'dd/MM/yyyy hh:mm') : aVars.lang.homeTableNotApplicable}}</td>
+              </tr>
+            </tbody>
+
+          </table>
+
+        </div>
+      </div>
+    </div>
+    <script>
+      var _lang = <% include ../public/lang/en.json %>;
+    </script>
+  </body>
+</html>
